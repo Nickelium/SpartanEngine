@@ -160,6 +160,7 @@ namespace Spartan
             // name the shader module (useful for GPU-based validation)
             RHI_Device::SetResourceName(static_cast<void*>(shader_module), RHI_Resource_Type::Shader, m_object_name.c_str());
 
+            m_descriptors.clear();
             // reflect shader resources (so that descriptor sets can be created later)
             Reflect
             (

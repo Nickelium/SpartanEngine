@@ -102,6 +102,7 @@ namespace Spartan
         unique_lock<mutex> lock(mutex_tasks);
 
         // Set termination flag to true.
+        // Why do you need to lock to change this?
         is_stopping = true;
 
         // Unlock the mutex

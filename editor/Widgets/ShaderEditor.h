@@ -41,6 +41,8 @@ public:
     void OnTickVisible() override;
 
 private:
+    void TestHotReload();
+
     void ShowShaderSource();
     void ShowShaderList();
     void ShowControls();

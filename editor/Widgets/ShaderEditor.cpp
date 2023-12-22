@@ -40,6 +40,9 @@ namespace
     const float k_horizontal_split_offset_from_bottom = 81.0f;
 }
 
+#include <filesystem>
+SP_OPTIMISE_OFF
+
 ShaderEditor::ShaderEditor(Editor* editor) : Widget(editor)
 {
     m_title         = "Shader Editor";
@@ -48,10 +51,70 @@ ShaderEditor::ShaderEditor(Editor* editor) : Widget(editor)
     m_size_initial  = ImVec2(1366, 1000);
     m_text_editor   = make_unique<TextEditor>();
     m_alpha         = 1.0f;
+
+    // TODO fix race condition
+    // Multiple access to shader resources?
+    // Make array copy with pointers?
+    // Exit condition?
+    //ThreadPool::AddTask
+    //(
+    //    []() -> void
+    //    {
+
+    //        const array<shared_ptr<RHI_Shader>, Renderer::number_shaders>& shaders = Renderer::GetShaders();
+    //        std::unordered_map<shared_ptr<Spartan::RHI_Shader>, long long> map{};
+    //        if (!shaders.empty())
+    //        {
+    //            for (auto& shader : shaders)
+    //            {
+    //                if (!shader)
+    //                {
+    //                    continue;
+    //                }
+    //                auto b = filesystem::path(shader->GetFilePath());
+    //                auto a = std::filesystem::last_write_time(b);
+    //                std::chrono::system_clock::rep c = a.time_since_epoch().count();
+    //                map[shader] = c;
+    //            }
+    //        }
+    //        // just run per frame instead
+    //        // race condition with shader editor!!
+    //        while (true)
+    //        {
+    //            //std::this_thread::sleep_for(std::chrono::milliseconds(16));
+    //            for (auto& shader : shaders)
+    //            {
+    //                if (!shader)
+    //                {
+    //                    continue;
+    //                }
+    //                auto b = filesystem::path(shader->GetFilePath());
+    //                if (!filesystem::exists(b))
+    //                    continue;
+    //                auto a = std::filesystem::last_write_time(b);
+    //                auto c = a.time_since_epoch();
+    //                auto d = c.count();
+    //                auto oldTime = map[shader];
+    //                if (d > oldTime)
+    //                {
+    //                    shader->Compile(shader->GetShaderStage(), shader->GetFilePath(), false);
+    //                    map[shader] = d;
+    //                }
+    //            }
+    //        }
+    //    }
+    //);
+
+}
+
+void ShaderEditor::TestHotReload()
+{
 }
 
 void ShaderEditor::OnTickVisible()
 {
+    TestHotReload();
+
     // Source
     ShowShaderSource();
 
@@ -65,6 +128,7 @@ void ShaderEditor::OnTickVisible()
 
 void ShaderEditor::ShowShaderSource()
 {
+    //return;
     ImVec2 size = ImVec2(ImGui::GetContentRegionMax().x * k_vertical_split_percentage, ImGui::GetContentRegionMax().y - k_horizontal_split_offset_from_bottom * Spartan::Window::GetDpiScale());
 
     if (ImGui::BeginChild("##shader_editor_source", size, true, ImGuiWindowFlags_NoScrollbar))
@@ -113,6 +177,7 @@ void ShaderEditor::ShowShaderSource()
 
 void ShaderEditor::ShowShaderList()
 {
+    //return;
     GetShaderInstances();
 
     ImVec2 size = ImVec2(0.0f, ImGui::GetContentRegionMax().y - k_horizontal_split_offset_from_bottom * Spartan::Window::GetDpiScale());
@@ -171,6 +236,7 @@ void ShaderEditor::ShowShaderList()
 
 void ShaderEditor::ShowControls()
 {
+    //return;
     if (ImGui::BeginChild("##shader_editor_controls", ImVec2(0.0f, 0.0f), true, ImGuiWindowFlags_NoScrollbar))
     {
         // Compile button
@@ -207,6 +273,7 @@ void ShaderEditor::ShowControls()
 
 void ShaderEditor::GetShaderInstances()
 {
+    //return;
     array<shared_ptr<RHI_Shader>, Renderer::number_shaders> shaders = Renderer::GetShaders();
     m_shaders.clear();
 

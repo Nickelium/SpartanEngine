@@ -39,6 +39,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "../Core/Window.h"
 #include "../Input/Input.h"
 #include "../Display/Display.h"
+#include "Shader_Reloader.h"
 //==============================================
 
 //= NAMESPACES ===============
@@ -211,6 +212,7 @@ namespace Spartan
         // resources
         CreateConstantBuffers();
         CreateShaders();
+        RunShaderReloadThread();
         CreateDepthStencilStates();
         CreateRasterizerStates();
         CreateBlendStates();
